@@ -23,21 +23,13 @@ source env/bin/activate
 필요한 패키지를 설치하기 위해 아래 명령어를 실행합니다.
 
 ```sh
-pip install -r requirements.txt
+pip install torch==1.8.0+cu111 torchvision==0.9.0+cu111 torchaudio==0.8.0 -f https://download.pytorch.org/whl/torch_stable.html timm mxnet opencv-python tensorflow scikit-learn matplotlib
 ```
 
-## 4. 환경변수 설정
-
-`.env` 파일을 생성하고 아래 내용을 추가합니다.
+## 4. 실행 가이드
 
 ```sh
-
-```
-
-## 5. 실행 가이드
-
-```sh
-
+python emotion_recognition_cam.py
 ```
 
 - 실행 전 IDE 재부팅 권장
