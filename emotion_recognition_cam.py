@@ -8,9 +8,8 @@ from PIL import Image
 import numpy as np
 from tensorflow.keras.models import load_model
 
-def load_model_function():
+def load_model_function(checkpoint_filepath):
     # 모델 체크포인트 불러오기
-    checkpoint_filepath = 'models/model_checkpoint.h5'
     loaded_model = load_model(checkpoint_filepath)
 
     return loaded_model
@@ -26,7 +25,7 @@ def emb_model_load():
 
     return model
 
-def png_to_emb_vector_one(path,model):
+def png_to_emb_vector_one(path,model,img):
     # 이미지 변환 정의
     transform = transforms.Compose([
         transforms.ToTensor(),
@@ -34,7 +33,7 @@ def png_to_emb_vector_one(path,model):
     ])
 
     # 이미지 로드 및 정렬
-    aligned = align.get_aligned_face(path)  # 정렬된 얼굴
+    aligned = align.get_aligned_face(path,img)  # 정렬된 얼굴
 
     if aligned==None:
         return None
@@ -64,28 +63,32 @@ def cam_to_prediction_function():
     }
     # 모델 불러오기
     emb_model = emb_model_load()
-    model = load_model_function()
+    model = load_model_function('models/model_checkpoint_60_40degree_100epochs_black_and_black_sun.h5')
     # 웹 캠 연결 및 마스크 적용하기
     webcam = cv2.VideoCapture(0)
     if not webcam.isOpened():
         print("Could not open webcam")
         exit()
-    # num = 0
+    num = 0
     try:
         while webcam.isOpened():
             status, frame = webcam.read()
             if status:
                 #마스크와 이미지 크기 맞춰 주기
-                frame=cv2.resize(frame, (960, 720))
-                cv2.imwrite('cam/temp/recent.png',frame)
+                # frame=cv2.resize(frame, (960, 720))
+                # cv2.imwrite('cam/temp/recent.png',frame)
+                # OpenCV의 BGR 형식을 RGB 형식으로 변환
+                frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+
+                # NumPy 배열을 PIL 이미지로 변환
+                img = Image.fromarray(frame_rgb)
 
                 # 얼굴 인식 및 예외처리
-                sample = png_to_emb_vector_one('cam/temp/recent.png',emb_model)
+                sample = png_to_emb_vector_one('',emb_model,img)
                 if sample==None:
                     continue
                 
-                # cv2.imwrite('cam/validation_dataset/%06d.png'%num,frame)
-                # num += 1
+                num += 1
 
                 # 예측된 클래스 및 레이블 변환
                 prediction = model.predict(sample.numpy())
