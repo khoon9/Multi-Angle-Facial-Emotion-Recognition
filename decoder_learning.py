@@ -7,7 +7,7 @@ from tensorflow.keras.callbacks import ModelCheckpoint, EarlyStopping
 from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as plt
 
-def load_embeddings_and_labels(emb_file='data/npy_files/X_embeddings.npy', label_file='data/npy_files/y_labels.npy'):
+def load_embeddings_and_labels(emb_file='data/mlp_input/npy_files/X_embeddings.npy', label_file='data/mlp_input/npy_files/y_labels.npy'):
     X_embeddings = np.load(emb_file)
     y_labels = np.load(label_file)
     return X_embeddings, y_labels
@@ -51,12 +51,6 @@ def decoder_learning_function():
     print(f'Validation Accuracy: {100*accuracy:.2f}%')
 
     return model, history
-
-# def main():
-#     decoder_learning_function()
-
-# if __name__ == "__main__":
-#     main()
 
 mlp_model, mlp_history = decoder_learning_function()
 # 정확도 시각화
