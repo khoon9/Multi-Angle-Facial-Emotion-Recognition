@@ -16,7 +16,7 @@ def load_and_align_images(image_paths):
             print(f"Warning: Could not align image at path {path}")
         else:
             aligned_images.append(aligned)
-            y.append((idx)//23373)
+            y.append((idx)//55809)
     return aligned_images, y
 
 def transform_images(images, transform):
@@ -79,21 +79,11 @@ def png_to_emb_function():
     X_tensor, y = png_to_emb_vector(image_paths,emb_model)
     return X_tensor, y
 
-
-# def main():
-#     X_tensor, y = png_to_emb_function()
-#     X = X_tensor.numpy()
-#     y = np.array(y)
-#     save_embeddings_and_labels(X, y)
-
-# if __name__ == "__main__":
-#     main()
-
 X_tensor, y = png_to_emb_function()
 X = X_tensor.numpy()
 y = np.array(y)
 
-def save_embeddings_and_labels(embeddings, labels, emb_file='data/npy_files/X_embeddings.npy', label_file='data/npy_files/y_labels.npy'):
+def save_embeddings_and_labels(embeddings, labels, emb_file='data/mlp_input/npy_files/X_embeddings.npy', label_file='data/mlp_input/npy_files/y_labels.npy'):
     np.save(emb_file, embeddings)
     np.save(label_file, labels)
 
